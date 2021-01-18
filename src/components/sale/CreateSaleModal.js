@@ -117,7 +117,7 @@ const CreateSaleModal = (props) => {
                             <Form.Label>Evento</Form.Label>
                             <Form.Control as="select" value={sale.event.id} onChange={(event) => changeEventHandler(event)}>
                                 <option disabled value={''}>Selecione uma opção</option>
-                                {events.map((event, index) => <option key={`${event.id}_${index}`} value={event.id}>{event.description}</option>)}
+                                {events ? events.map((event, index) => <option key={`${event.id}_${index}`} value={event.id}>{event.description}</option>) : null}
                             </Form.Control>
                         </Form.Group>
                     </Col>

@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, CardMedia, makeStyles, TextField, Typography } from "@material-ui/core";
+import { Button, Card, CardActions, CardContent, CardMedia, makeStyles, TextField } from "@material-ui/core";
 
 import logo from '../../assets/logo.png';
 
@@ -10,9 +10,11 @@ const useStyles = makeStyles({
         justifyContent: 'center'
     },
     card: {
-        minWidth: 275,
-        width: "25%",
-        textAlign: 'center',
+        minWidth: 350,
+        width: "15%",
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         backgroundColor: 'pink',
         padding: '15px 0'
     },
@@ -31,6 +33,16 @@ const useStyles = makeStyles({
         width: 171,
         height: 60,
         margin: '20px auto',
+    },
+    content: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '100%'
+    },
+    inputs: {
+        margin: '12px auto',
+        width: '70%'
     }
 });
 
@@ -44,9 +56,9 @@ const Login = () => {
                     className={classes.media}
                     image={logo}
                 />
-                <CardContent>
-                    <TextField id="standard-basic" label="Usuário" variant="outlined" className="my-3" />
-                    <TextField id="standard-basic" label="Senha" variant="outlined" type="password" className="my-2" />
+                <CardContent className={classes.content}>
+                    <TextField id="standard-basic" label="Usuário" variant="outlined" className={classes.inputs} />
+                    <TextField id="standard-basic" label="Senha" variant="outlined" type="password" className={classes.inputs} />
                 </CardContent>
                 <CardActions className="justify-content-center my-4">
                     <Button variant="contained" color="secondary">Entrar</Button>

@@ -8,7 +8,7 @@ import Sale from "./Sale";
 const Sales = () => {
     const [sales, setSales] = useState([]);
     const [show, setShow] = useState(false);
-    const salesMap = useMemo(() => sales.reduce((acc, act, i) => { acc[act.id] = i; return acc }, {}), [sales]);
+    const salesMap = useMemo(() => sales ? sales.reduce((acc, act, i) => { acc[act.id] = i; return acc }, {}) : null, [sales]);
 
     useEffect(() => {
         let isActive = true;

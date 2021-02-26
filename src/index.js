@@ -4,10 +4,10 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'fontsource-roboto';
-import Login from './components/login/Login';
+import App from './App';
 
 ReactDOM.render(
-  <Login />,
+  <App />,
   document.getElementById('root')
 );
 

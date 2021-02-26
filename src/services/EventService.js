@@ -1,8 +1,9 @@
 import { environment } from "../environment/Environment";
+import Api from "./Api";
 
 const RESOURCE_URL = `${environment.API_URL}/events`
 
 export const getActiveEvents = async () => {
-    const response = await fetch(RESOURCE_URL);
-    return await response.json();
+    const response = await Api.get(RESOURCE_URL);
+    return response.data;
 }

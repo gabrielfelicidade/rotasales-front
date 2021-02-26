@@ -34,7 +34,7 @@ const SaleItems = (props) => {
                     <span className="ml-2">Incluir Item</span>
                 </Button>
             </div>
-            <Table striped bordered hover responsive="md">
+            <Table striped bordered hover className="w-100 mx-3">
                 <thead>
                     <tr className="text-center">
                         <th>Item</th>

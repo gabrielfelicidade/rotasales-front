@@ -1,6 +1,10 @@
 import { Button, Card, CardActions, CardContent, CardMedia, makeStyles, TextField } from "@material-ui/core";
+import { useContext, useState } from "react";
+import { useHistory } from "react-router-dom";
 
 import logo from '../../assets/logo.png';
+import { AuthContext } from "../../hooks/Authentication";
+import Api from "../../services/Api";
 
 const useStyles = makeStyles({
     root: {
@@ -48,6 +52,15 @@ const useStyles = makeStyles({
 
 const Login = () => {
     const classes = useStyles();
+    const auth = useContext(AuthContext);
+    const [formInputs, setFormInputs] = useState({ username:'', password:'' });
+    const history = useHistory();
+
+    const authenticate = async () => {
+        const token = await auth.login(formInputs.username, formInputs.password);
+        Api.defaults.headers.Authorization = `Bearer ${token.token}`;
+        history.push('/sales');
+    }
 
     return (
         <div className={classes.root}>
@@ -57,11 +70,11 @@ const Login = () => {
                     image={logo}
                 />
                 <CardContent className={classes.content}>
-                    <TextField id="standard-basic" label="Usuário" variant="outlined" className={classes.inputs} />
-                    <TextField id="standard-basic" label="Senha" variant="outlined" type="password" className={classes.inputs} />
+                    <TextField id="standard-basic" label="Usuário" variant="outlined" className={classes.inputs} value={formInputs.username} onChange={(e) => setFormInputs({ ...formInputs, username: e.target.value })} />
+                    <TextField id="standard-basic" label="Senha" variant="outlined" type="password" className={classes.inputs} value={formInputs.password} onChange={(e) => setFormInputs({ ...formInputs, password: e.target.value })} />
                 </CardContent>
                 <CardActions className="justify-content-center my-4">
-                    <Button variant="contained" color="secondary">Entrar</Button>
+                    <Button variant="contained" color="secondary" onClick={authenticate}>Entrar</Button>
                 </CardActions>
             </Card>
         </div>

@@ -5,12 +5,14 @@ import Sales from './components/sale/Sales';
 import Login from './components/login/Login';
 import { AuthProvider } from './hooks/Authentication';
 import ProtectedRoute from './components/route/ProtectedRoute';
+import Receipt from './components/sale/Receipt';
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
           <Route path="/login" component={Login} />
+          <Route path="/receipt" component={Receipt} />
           <Route path="/" render={({ match: { url } }) => (
             <>
               <Navbar bg="dark" expand="lg" variant="dark">

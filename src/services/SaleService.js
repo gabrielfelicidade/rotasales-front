@@ -1,7 +1,6 @@
-import { environment } from "../environment/Environment";
 import Api from "./Api";
 
-const RESOURCE_URL = `${environment.API_URL}/sales`
+const RESOURCE_URL = `/sales`
 
 export const getSalesBySellerId = async () => {
     const response = await Api.get(RESOURCE_URL);

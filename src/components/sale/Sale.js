@@ -1,8 +1,13 @@
 import { Accordion, Button, Card } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 
 import SaleItems from "./SaleItems";
 
 const Sale = (props) => {
+
+    const history = useHistory();
+
+    const printReceipt = () => history.push('/receipt')
 
     return (
         <Card key={props.sale.id}>
@@ -20,7 +25,8 @@ const Sale = (props) => {
                         removeItemHandler={props.removeItemHandler}
                         addItemHandler={props.addItemHandler} />
                     <div className="text-right">
-                        <Button className="mr-3" variant="danger" onClick={() => props.onDeleteClick(props.sale.id)}>Excluir</Button>
+                        <Button onClick={printReceipt}>Baixar Comprovante</Button>
+                        <Button className="mx-3" variant="danger" onClick={() => props.onDeleteClick(props.sale.id)}>Excluir</Button>
                         <Button onClick={() => props.onSaveClick(props.sale.id)}>Salvar</Button>
                     </div>
                 </Card.Body>

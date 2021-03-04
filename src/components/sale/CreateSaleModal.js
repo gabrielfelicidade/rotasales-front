@@ -3,10 +3,13 @@ import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { getActiveEvents } from "../../services/EventService";
 import { createSale } from "../../services/SaleService";
 import SaleItems from "./SaleItems";
+import { toast } from 'react-toastify';
 
 const CreateSaleModal = (props) => {
 
-    const [sale, setSale] = useState({ customer: '', event: { id: '' }, items: [] });
+    const cleanState = { customer: '', event: { id: '' }, items: [] };
+
+    const [sale, setSale] = useState({ ...cleanState });
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
@@ -47,7 +50,7 @@ const CreateSaleModal = (props) => {
         const newSale = { ...sale };
         newSale.items[itemIndex] = {
             ...newSale.items[itemIndex],
-            amount: parseInt(event.target.value)
+            amount: event.target.value === "" ? 1 : parseInt(event.target.value) <= 0 ? 1 : parseInt(event.target.value)
         };
         setSale(newSale);
     }
@@ -68,7 +71,7 @@ const CreateSaleModal = (props) => {
                 sale: {
                     id: saleId
                 },
-                amount: 0,
+                amount: 1,
                 unitaryValue: 0
             }
         );
@@ -89,8 +92,30 @@ const CreateSaleModal = (props) => {
         setSale(newSale);
     }
 
+    const isFormValid = () => {
+        var hasErrors = sale.items.reduce((acm, act) => (act.amount <= 0 || act.item.id === '') || acm, false);
+        if (sale.customer === '') hasErrors = true;
+        if (sale.event.id === '') hasErrors = true;
+        if (sale.items.length === 0) hasErrors = true;
+        return !hasErrors;
+    }
+
     const saveButtonHandler = () => {
-        createSale(sale).then(sale => { console.log(sale); setSale({ customer: '', event: { id: '' }, items: [] }) });
+        if (isFormValid()) {
+            createSale(sale)
+                .then(sale => {
+                    onCloseHandler();
+                    toast.success('Venda criada com sucesso!')
+                })
+                .catch(_ => toast.error('Erro ao criar venda'));
+        } else {
+            toast.error('Preencha todos os campos corretamente!');
+        }
+    }
+
+    const onCloseHandler = () => {
+        setSale({ ...cleanState });
+        props.onHide();
     }
 
     return (
@@ -108,14 +133,14 @@ const CreateSaleModal = (props) => {
                 <Row>
                     <Col>
                         <Form.Group>
-                            <Form.Label>Comprador</Form.Label>
-                            <Form.Control type="text" value={sale.customer} onChange={event => changeCustomerHandler(event)} />
+                            <Form.Label>Comprador *</Form.Label>
+                            <Form.Control required type="text" value={sale.customer} onChange={event => changeCustomerHandler(event)} />
                         </Form.Group>
                     </Col>
                     <Col>
                         <Form.Group>
-                            <Form.Label>Evento</Form.Label>
-                            <Form.Control as="select" value={sale.event.id} onChange={(event) => changeEventHandler(event)}>
+                            <Form.Label>Evento *</Form.Label>
+                            <Form.Control required as="select" value={sale.event.id} onChange={(event) => changeEventHandler(event)}>
                                 <option disabled value={''}>Selecione uma opção</option>
                                 {events ? events.map((event, index) => <option key={`${event.id}_${index}`} value={event.id}>{event.description}</option>) : null}
                             </Form.Control>
@@ -133,7 +158,7 @@ const CreateSaleModal = (props) => {
                 </Row>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={props.onHide}>Cancelar</Button>
+                <Button variant="secondary" onClick={onCloseHandler}>Cancelar</Button>
                 <Button variant="primary" onClick={saveButtonHandler}>Salvar</Button>
             </Modal.Footer>
         </Modal>

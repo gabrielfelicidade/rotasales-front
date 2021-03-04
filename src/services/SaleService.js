@@ -23,3 +23,8 @@ export const deleteSale = async (saleId) => {
     const response = await Api.delete(`${RESOURCE_URL}/${saleId}`);
     return response.data;
 }
+
+export const downloadReceipt = async (saleId) => {
+    const response = await Api.get(`/exports/receipt/${saleId}`, { responseType: 'blob' });
+    return response;
+}

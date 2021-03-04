@@ -1,13 +1,18 @@
 import { Accordion, Button, Card } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
+import { downloadReceipt } from "../../services/SaleService";
 
 import SaleItems from "./SaleItems";
 
 const Sale = (props) => {
 
-    const history = useHistory();
-
-    const printReceipt = () => history.push('/receipt')
+    const downloadReceiptHandler = () => {
+        downloadReceipt(props.sale.id)
+        .then(res => {
+            const blob = new Blob([res.data], { type: 'application/pdf' });
+            const fileUrl = URL.createObjectURL(blob);
+            window.open(fileUrl, '_blank');
+        });
+    }
 
     return (
         <Card key={props.sale.id}>
@@ -24,8 +29,8 @@ const Sale = (props) => {
                         changeAmountHandler={props.changeAmountHandler}
                         removeItemHandler={props.removeItemHandler}
                         addItemHandler={props.addItemHandler} />
-                    <div className="text-right">
-                        <Button onClick={printReceipt}>Baixar Comprovante</Button>
+                    <div className="d-flex gap-3 justify-content-end mt-2">
+                        <Button onClick={downloadReceiptHandler}>Baixar Comprovante</Button>
                         <Button className="mx-3" variant="danger" onClick={() => props.onDeleteClick(props.sale.id)}>Excluir</Button>
                         <Button onClick={() => props.onSaveClick(props.sale.id)}>Salvar</Button>
                     </div>

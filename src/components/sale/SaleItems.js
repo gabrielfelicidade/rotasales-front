@@ -34,10 +34,10 @@ const SaleItems = (props) => {
                     <span className="ml-2">Incluir Item</span>
                 </Button>
             </div>
-            <Table striped bordered hover className="w-100 mx-3">
+            <Table striped bordered hover responsive className="w-100 mx-3">
                 <thead>
                     <tr className="text-center">
-                        <th>Item</th>
+                        <th style={{minWidth: '180px'}}>Item</th>
                         <th>Quantidade</th>
                         <th>Valor</th>
                         <th>Ações</th>

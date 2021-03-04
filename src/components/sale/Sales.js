@@ -5,26 +5,24 @@ import { deleteSale, getSalesBySellerId, updateSale } from '../../services/SaleS
 import CreateSaleModal from "./CreateSaleModal";
 import Sale from "./Sale";
 
+import { toast } from 'react-toastify';
+
 const Sales = () => {
     const [sales, setSales] = useState([]);
     const [show, setShow] = useState(false);
+    const [forceUpdate, setForceUpdate] = useState(false);
     const salesMap = useMemo(() => sales ? sales.reduce((acc, act, i) => { acc[act.id] = i; return acc }, {}) : null, [sales]);
 
     useEffect(() => {
-        let isActive = true;
-
-        getSalesBySellerId()
-            .then(sales => {
-                if (isActive) {
+        if (forceUpdate || !show) {
+            setForceUpdate(false);
+            getSalesBySellerId()
+                .then(sales => {
                     setSales(sales);
-                }
-            })
-            .catch(error => console.log(error))
-
-        return () => {
-            isActive = false;
+                })
+                .catch(_ => toast.error('Erro ao recuperar suas vendas'))
         }
-    }, []);
+    }, [show, forceUpdate]);
 
     const changeItemHandler = (saleId, item, itemIndex) => {
         const sale = { ...sales[salesMap[saleId]] };
@@ -48,7 +46,7 @@ const Sales = () => {
         const sale = { ...sales[salesMap[saleId]] };
         sale.items[itemIndex] = {
             ...sale.items[itemIndex],
-            amount: parseInt(event.target.value)
+            amount: event.target.value === "" ? 1 : parseInt(event.target.value) <= 0 ? 1 : parseInt(event.target.value)
         };
         setSales(sales.map((s) => s.id === saleId ? sale : s));
     }
@@ -69,7 +67,7 @@ const Sales = () => {
                 sale: {
                     id: saleId
                 },
-                amount: 0,
+                amount: 1,
                 unitaryValue: 0
             }
         );
@@ -77,14 +75,26 @@ const Sales = () => {
     }
 
     const saveButtonHandler = (saleId) => {
-        updateSale(sales[salesMap[saleId]]).then(sale => console.log(sale));
+        const hasErrors = sales[salesMap[saleId]].items.reduce((acm, act) => (act.amount <= 0 || act.item.id === '') || acm, false) || sales[salesMap[saleId]].items.length === 0;
+        if (!hasErrors) {
+            updateSale(sales[salesMap[saleId]])
+                .then(_ => toast.success('Venda salva com sucesso!'))
+                .catch(_ => toast.error('Erro ao salvar venda'));
+        } else {
+            toast.error('Preencha todos os campos corretamente!');
+        }
     }
 
     const deleteButtonHandler = (saleId) => {
-        deleteSale(saleId).then(sale => console.log(sale));
+        deleteSale(saleId)
+            .then(_ => setForceUpdate(true))
+            .then(_ => toast.success('Venda excluída com sucesso!'))
+            .catch(_ => toast.error('Erro ao excluir venda'));
     }
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setShow(false);
+    }
 
     const handleRegisterSell = () => setShow(true);
 

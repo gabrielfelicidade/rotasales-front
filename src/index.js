@@ -5,9 +5,12 @@ import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'fontsource-roboto';
 import App from './App';
+import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.render(
-  <App />,
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
   document.getElementById('root')
 );
 

@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 
 import logo from '../../assets/logo.png';
 import { AuthContext } from "../../hooks/Authentication";
-import Api from "../../services/Api";
+import { toast } from 'react-toastify';
 
 const useStyles = makeStyles({
     root: {
@@ -53,13 +53,36 @@ const useStyles = makeStyles({
 const Login = () => {
     const classes = useStyles();
     const auth = useContext(AuthContext);
-    const [formInputs, setFormInputs] = useState({ username:'', password:'' });
+    const [formInputs, setFormInputs] = useState({
+        username: {
+            value: '',
+            error: true,
+            touched: false
+        },
+        password: {
+            value: '',
+            error: true,
+            touched: false
+        }
+    });
     const history = useHistory();
 
+    const isFormValid = () => Object.values(formInputs).reduce((acm, act) => acm && !act.error && act.touched, true);
+
+    const inputChangeHandler = (event) => {
+        const newInputValue = { ...formInputs[event.target.name], value: event.target.value, touched: true, error: false };
+        if (event.target.value === '')
+            newInputValue.error = true;
+        setFormInputs({ ...formInputs, [event.target.name]: newInputValue });
+    }
+
     const authenticate = async () => {
-        const token = await auth.login(formInputs.username, formInputs.password);
-        Api.defaults.headers.Authorization = `Bearer ${token.token}`;
-        history.push('/sales');
+        if (isFormValid()) {
+            await auth.login(formInputs.username.value, formInputs.password.value);
+            history.push('/sales');
+        } else {
+            toast.error('Preencha todos os campos corretamente!');
+        }
     }
 
     return (
@@ -70,8 +93,8 @@ const Login = () => {
                     image={logo}
                 />
                 <CardContent className={classes.content}>
-                    <TextField id="standard-basic" label="Usuário" variant="outlined" className={classes.inputs} value={formInputs.username} onChange={(e) => setFormInputs({ ...formInputs, username: e.target.value })} />
-                    <TextField id="standard-basic" label="Senha" variant="outlined" type="password" className={classes.inputs} value={formInputs.password} onChange={(e) => setFormInputs({ ...formInputs, password: e.target.value })} />
+                    <TextField required name="username" label="Usuário" variant="outlined" className={classes.inputs} value={formInputs.username.value} onChange={inputChangeHandler} />
+                    <TextField required name="password" label="Senha" variant="outlined" type="password" className={classes.inputs} value={formInputs.password.value} onChange={inputChangeHandler} />
                 </CardContent>
                 <CardActions className="justify-content-center my-4">
                     <Button variant="contained" color="secondary" onClick={authenticate}>Entrar</Button>

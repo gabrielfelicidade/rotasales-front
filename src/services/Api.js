@@ -1,18 +1,20 @@
 import axios from "axios";
+import { environment } from "../environment/Environment"
 
-const BASE_URL = 'https://calm-brook-27784.herokuapp.com'
 const axiosInstance = axios.create({
-    baseURL: BASE_URL
+    baseURL: environment.API_URL
 });
 
 export default axiosInstance
 
-axiosInstance.interceptors.response.use((response) => {
-    return response
-}, async (error) => {
-    if (error.response.status === 403) {
-        localStorage.removeItem('token');
-    }
+export const setupInterceptors = (logoff) => {
+    axiosInstance.interceptors.response.use((response) => {
+        return response
+    }, async (error) => {
+        if (error.response.status === 403) {
+            logoff();
+        }
 
-    return Promise.reject(error);
-})
+        return Promise.reject(error);
+    });
+}

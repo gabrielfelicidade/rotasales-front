@@ -6,10 +6,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'fontsource-roboto';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from './hooks/Authentication';
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </BrowserRouter>,
   document.getElementById('root')
 );

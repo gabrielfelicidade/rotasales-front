@@ -15,7 +15,7 @@ export const createSale = async (sale) => {
 
 export const updateSale = async (sale) => {
     const object = { ...sale };
-    const response = await Api.post(RESOURCE_URL, object);
+    const response = await Api.put(RESOURCE_URL, object);
     return response.data;
 }
 

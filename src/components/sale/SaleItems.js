@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 
-import { getItems } from "../../services/ItemService";
+import { getItemsByEventId } from "../../services/ItemService";
 import { formatCurrency } from "../../utils/FormatUtils";
 import { FaPlusCircle, FaTimes } from "react-icons/fa";
 
@@ -13,13 +13,15 @@ const SaleItems = (props) => {
     useEffect(() => {
         let isActive = true;
 
-        getItems()
-            .then(items => {
-                if (isActive) {
-                    setItems(items)
-                }
-            })
-            .catch(error => console.log(error))
+        if (props.sale.event.id) {
+            getItemsByEventId(props.sale.event.id)
+                .then(items => {
+                    if (isActive) {
+                        setItems(items)
+                    }
+                })
+                .catch(error => console.log(error));
+        }
 
         return () => {
             isActive = false;
@@ -51,7 +53,7 @@ const SaleItems = (props) => {
                                 {items.map((item, index) => <option key={`${item.id}_${index}`} value={item.id}>{item.description}</option>)}
                             </select></td>
                             <td><input className="form-control" type="number" value={saleItem.amount} onChange={event => props.changeAmountHandler(props.sale.id, itemIndex, event)} /></td>
-                            <td>{formatCurrency(saleItem.amount * saleItem.unitaryValue)}</td>
+                            <td>{formatCurrency(saleItem.amount * saleItem.item.value)}</td>
                             <td><FaTimes onClick={() => props.removeItemHandler(props.sale.id, itemIndex)} /></td>
                         </tr>
                     ))}
@@ -59,7 +61,7 @@ const SaleItems = (props) => {
                 <tfoot>
                     <tr>
                         <td className="text-right" colSpan="2">Total</td>
-                        <td>{formatCurrency(props.sale.items.reduce((acc, item) => acc + (item.amount * item.unitaryValue), 0))}</td>
+                        <td>{formatCurrency(props.sale.items.reduce((acc, item) => acc + (item.amount * item.item.value), 0))}</td>
                     </tr>
                 </tfoot>
             </Table>

@@ -39,8 +39,7 @@ const CreateSaleModal = (props) => {
         } else {
             newSale.items[itemIndex] = {
                 ...newSale.items[itemIndex],
-                item: item,
-                unitaryValue: item.value
+                item: item
             };
         }
         setSale(newSale);
@@ -66,13 +65,13 @@ const CreateSaleModal = (props) => {
         newSale.items.push(
             {
                 item: {
-                    id: ''
+                    id: '',
+                    value: 0
                 },
                 sale: {
                     id: saleId
                 },
-                amount: 1,
-                unitaryValue: 0
+                amount: 1
             }
         );
         setSale(newSale);
@@ -126,7 +125,7 @@ const CreateSaleModal = (props) => {
             keyboard={false}
             size="lg"
         >
-            <Modal.Header closeButton>
+            <Modal.Header>
                 <Modal.Title>Cadastrar Venda</Modal.Title>
             </Modal.Header>
             <Modal.Body>

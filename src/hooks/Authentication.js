@@ -53,7 +53,6 @@ export const useAuth = () => {
     const logoff = () => {
         localStorage.removeItem('token');
         setToken(null);
-
     }
 
     return {

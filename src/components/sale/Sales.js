@@ -35,8 +35,7 @@ const Sales = () => {
         } else {
             sale.items[itemIndex] = {
                 ...sale.items[itemIndex],
-                item: item,
-                unitaryValue: item.value
+                item: item
             };
         }
         setSales(sales.map((s) => s.id === saleId ? sale : s));
@@ -62,13 +61,13 @@ const Sales = () => {
         sale.items.push(
             {
                 item: {
-                    id: ''
+                    id: '',
+                    value: 0
                 },
                 sale: {
                     id: saleId
                 },
-                amount: 1,
-                unitaryValue: 0
+                amount: 1
             }
         );
         setSales(sales.map((s) => s.id === saleId ? sale : s));

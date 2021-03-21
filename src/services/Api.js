@@ -11,7 +11,7 @@ export const setupInterceptors = (logoff) => {
     axiosInstance.interceptors.response.use((response) => {
         return response
     }, async (error) => {
-        if (error.response.status === 403) {
+        if (error.response.status === 401) {
             logoff();
         }
 

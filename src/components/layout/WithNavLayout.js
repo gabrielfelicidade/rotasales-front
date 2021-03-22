@@ -1,4 +1,4 @@
-import { Nav, Navbar } from "react-bootstrap";
+import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import LogoutButton from "../login/LogoutButton";
 
@@ -10,7 +10,10 @@ const WithNavLayout = (props) => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
-                        <Nav.Link as={Link} to="/sales">Vendas</Nav.Link>
+                        <NavDropdown title="Vendas" id="basic-nav-dropdown">
+                            <NavDropdown.Item as={Link} to="/sales">Minhas Vendas</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/qr-scanner">Ler QRCode</NavDropdown.Item>
+                        </NavDropdown>
                         <LogoutButton />
                     </Nav>
                 </Navbar.Collapse>

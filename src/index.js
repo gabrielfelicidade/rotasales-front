@@ -5,15 +5,22 @@ import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'fontsource-roboto';
 import App from './App';
-import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './hooks/Authentication';
+import { ToastContainer } from 'react-toastify';
 
 ReactDOM.render(
-  <BrowserRouter>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
-  </BrowserRouter>,
+  <AuthProvider>
+    <App />
+    <ToastContainer
+      position="top-right"
+      autoClose={2000}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss={false}
+      draggable={false}
+      pauseOnHover={false}
+    />
+  </AuthProvider>,
   document.getElementById('root')
 );
 

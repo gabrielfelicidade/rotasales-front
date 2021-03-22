@@ -24,6 +24,12 @@ export const deleteSale = async (saleId) => {
     return response.data;
 }
 
+export const changeSaleStatus = async (saleId, status) => {
+    const object = { saleId, status };
+    const response = await Api.patch(RESOURCE_URL, object)
+    return response;
+}
+
 export const downloadReceipt = async (saleId) => {
     const response = await Api.get(`/exports/receipt/${saleId}`, { responseType: 'blob' });
     return response;

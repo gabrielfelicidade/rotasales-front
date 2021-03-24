@@ -21,7 +21,7 @@ const CreateSaleModal = (props) => {
                     setEvents(events);
                 }
             })
-            .catch(error => console.log(error))
+            .catch(_ => toast.error('Erro ao recuperar os eventos ativos'))
 
         return () => {
             isActive = false;
@@ -106,7 +106,7 @@ const CreateSaleModal = (props) => {
                     onCloseHandler();
                     toast.success('Venda criada com sucesso!')
                 })
-                .catch(_ => toast.error('Erro ao criar venda'));
+                .catch(error => toast.error(`Erro ao criar venda: ${error.response.data.reason}`));
         } else {
             toast.error('Preencha todos os campos corretamente!');
         }

@@ -1,4 +1,5 @@
 import { Accordion, Button, Card } from "react-bootstrap";
+import { toast } from "react-toastify";
 import { downloadReceipt } from "../../services/SaleService";
 
 import SaleItems from "./SaleItems";
@@ -7,11 +8,15 @@ const Sale = (props) => {
 
     const downloadReceiptHandler = () => {
         downloadReceipt(props.sale.id)
-        .then(res => {
-            const blob = new Blob([res.data], { type: 'application/pdf' });
-            const fileUrl = URL.createObjectURL(blob);
-            window.open(fileUrl, '_blank');
-        });
+            .then(res => {
+                const blob = new Blob([res.data], { type: 'application/pdf' });
+                const fileUrl = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = fileUrl;
+                a.download = `${props.sale.event.description} - ${props.sale.customer}.pdf`;
+                a.click();
+            })
+            .catch(_ => toast.error('Erro ao realizar download do recibo'));
     }
 
     return (

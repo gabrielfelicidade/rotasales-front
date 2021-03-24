@@ -27,7 +27,10 @@ const QRCodeReader = () => {
         changeSaleStatus(saleId, 'DELIVERED')
             .then(_ => toast.success('Pedido atualizado com sucesso!'))
             .catch(error => toast.error(`Erro ao atualizar o pedido: ${error.response.data.reason}`))
-            .finally(_ => { setOpen(false); setSaleId(null); });
+            .finally(_ => {
+                setOpen(false);
+                setSaleId(null);
+            });
     }
 
     const handleClose = () => {

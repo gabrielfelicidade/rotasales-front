@@ -1,6 +1,5 @@
 import './App.css';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
-import Sales from './components/sale/Sales';
 import Login from './components/login/Login';
 import { AuthContext } from './hooks/Authentication';
 
@@ -8,23 +7,29 @@ import 'react-toastify/dist/ReactToastify.css';
 import WithNavLayoutRoute from './components/route/WithNavLayoutRoute';
 import { useContext } from 'react';
 import { setupInterceptors } from './services/Api';
-import QRCodeReader from './components/sale/QRCodeReader';
+import Sales from './components/sale/Sales';
+import Home from './components/home/Home';
+import { ThemeProvider } from '@mui/private-theming';
+import { createTheme } from '@mui/material';
 
 function App() {
 
   const auth = useContext(AuthContext);
+  const theme = createTheme();
 
   setupInterceptors(auth.logoff);
 
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route path="/login" component={Login} />
-        <WithNavLayoutRoute exact path="/sales" component={Sales} />
-        <WithNavLayoutRoute exact path="/qr-scanner" component={QRCodeReader} />
-        <Redirect to="/sales" />
-      </Switch>
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Switch>
+          <Route path="/login" component={Login} />
+          <WithNavLayoutRoute exact path="/home" component={Home} />
+          <WithNavLayoutRoute exact path="/sales" component={Sales} />
+          <Redirect to="/home" />
+        </Switch>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

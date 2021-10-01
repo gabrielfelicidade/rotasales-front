@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { Nav } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { AuthContext } from "../../hooks/Authentication";
 
@@ -12,7 +11,7 @@ const LogoutButton = () => {
         history.push('/login');
     }
 
-    return <Nav.Link onClick={logoff}>Sair</Nav.Link>
+    return null;
 }
 
 export default LogoutButton;

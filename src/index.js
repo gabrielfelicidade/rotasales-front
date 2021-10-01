@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import 'fontsource-roboto';
 import App from './App';
 import { AuthProvider } from './hooks/Authentication';

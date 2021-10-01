@@ -1,10 +1,11 @@
-import { Button, Card, CardActions, CardContent, CardMedia, makeStyles, TextField } from "@material-ui/core";
 import { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 import logo from '../../assets/logo.png';
 import { AuthContext } from "../../hooks/Authentication";
 import { toast } from 'react-toastify';
+import { Button, Card, CardActions, CardContent, CardMedia, TextField } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({
     root: {

@@ -2,6 +2,7 @@ import { Edit } from "@mui/icons-material";
 import { styled } from "@mui/system";
 import { DataGrid } from "@mui/x-data-grid";
 import NumberFormat from "react-number-format";
+import { SaleStatus } from "./Sales";
 
 const StyledDataGrid = styled(DataGrid)`
   &.MuiDataGrid-root .MuiDataGrid-columnHeader:focus,
@@ -25,9 +26,9 @@ const SalesGrid = () => {
         { id: 1, event: 'Hello', buyer: 'World', totalValue: 23.50, donation: false, status: 'WITHDRAWN' },
         { id: 2, event: 'Hello', buyer: 'World', totalValue: 12.50, donation: false, status: 'WITHDRAWN' },
         { id: 3, event: 'Hello', buyer: 'World', totalValue: 1.10, donation: false, status: 'WITHDRAWN' },
-        { id: 4, event: 'Hello', buyer: 'World', totalValue: 1, donation: false, status: 'WITHDRAWN' },
+        { id: 4, event: 'Hello', buyer: 'World', totalValue: 1, donation: true, status: 'WITHDRAWN' },
         { id: 5, event: 'Hello', buyer: 'World', totalValue: 23.50, donation: false, status: 'WITHDRAWN' },
-        { id: 6, event: 'Hello', buyer: 'World', totalValue: 12.50, donation: false, status: 'WITHDRAWN' },
+        { id: 6, event: 'Hello', buyer: 'World', totalValue: 12.50, donation: false, status: 'AWAITING_WITHDRAWAL' },
         { id: 7, event: 'Hello', buyer: 'World', totalValue: 1.10, donation: false, status: 'WITHDRAWN' },
         { id: 8, event: 'Hello', buyer: 'World', totalValue: 1, donation: false, status: 'WITHDRAWN' },
         { id: 9, event: 'Hello', buyer: 'World', totalValue: 23.50, donation: false, status: 'WITHDRAWN' },
@@ -47,8 +48,22 @@ const SalesGrid = () => {
                 );
             }
         },
-        { field: 'donation', flex: 1, headerName: 'Doação' },
-        { field: 'status', flex: 1, headerName: 'Status' },
+        { 
+            field: 'donation', 
+            flex: 1, 
+            headerName: 'Doação',
+            renderCell: (params) => {
+                return params.value ? "Sim" : "Não";
+            }
+        },
+        { 
+            field: 'status', 
+            flex: 1, 
+            headerName: 'Status',
+            renderCell: (params) => {
+                return SaleStatus[params.value];
+            } 
+        },
         {
             field: '',
             headerName: '',
@@ -67,7 +82,7 @@ const SalesGrid = () => {
 
     return (
         <div style={{ height: 650, width: '100%', marginTop: '2rem' }}>
-            <StyledDataGrid disableSelectionOnClick={true} disableColumnSelector={true} rows={rows} columns={columns} />
+            <StyledDataGrid rowsPerPageOptions={[10]} disableSelectionOnClick={true} disableColumnSelector={true} rows={rows} columns={columns} />
         </div>
     );
 };

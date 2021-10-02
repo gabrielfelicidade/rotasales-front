@@ -3,6 +3,11 @@ import { useState } from "react";
 import SalesFilter from "./SalesFilter";
 import SalesGrid from "./SalesGrid";
 
+export const SaleStatus = {
+    'AWAITING_WITHDRAWAL': 'Aguardando Retirada',
+    'WITHDRAWN': 'Retirado'
+};
+
 const Sales = () => {
     const buyer = useState('');
     const event = useState(null);

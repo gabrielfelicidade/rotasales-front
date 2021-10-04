@@ -1,5 +1,6 @@
 import { Typography } from "@mui/material";
 import { useState } from "react";
+import SalesActions from "./SalesActions";
 import SalesFilter from "./SalesFilter";
 import SalesGrid from "./SalesGrid";
 
@@ -10,7 +11,7 @@ export const SaleStatus = {
 
 const Sales = () => {
     const buyer = useState('');
-    const event = useState(null);
+    const event = useState('');
     const donation = useState(false);
 
     const onSearchClick = () => {
@@ -28,6 +29,7 @@ const Sales = () => {
                 donation={donation}
                 onSearchClick={onSearchClick}
             />
+            <SalesActions />
             <SalesGrid />
         </>
     );

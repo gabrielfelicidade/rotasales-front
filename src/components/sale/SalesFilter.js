@@ -14,35 +14,31 @@ const SalesFilter = ({ buyer, event, donation, onSearchClick }) => {
             </AccordionSummary>
             <AccordionDetails>
                 <Grid container spacing={6}>
-                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <TextField value={buyer[0]} onChange={e => buyer[1](e.target.value)} id="outlined-basic" label="Comprador" variant="outlined" style={{ width: '100%' }} />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <FormControl sx={{ minWidth: 80 }}
                             style={{ width: '100%' }}>
-                            <InputLabel id="demo-simple-select-autowidth-label">Evento</InputLabel>
+                            <InputLabel id="event-select">Evento</InputLabel>
                             <Select
-                                labelId="demo-simple-select-autowidth-label"
-                                label="Age"
+                                labelId="event-select"
+                                label="Event"
                                 style={{ width: '100%' }}
+                                value={event[0]}
                             >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                <MenuItem value={10}>Twenty</MenuItem>
-                                <MenuItem value={21}>Twenty one</MenuItem>
-                                <MenuItem value={22}>Twenty one and a half</MenuItem>
+                                <MenuItem value={null}>Pizzaract</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid item xs={12} sm={6} md={3} lg={2} style={{ textAlign: 'center' }}>
+                    <Grid item xs={12} sm={6} md={3} style={{ textAlign: 'center' }}>
                         <FormControlLabel
                             label="Doação"
                             control={<Checkbox color="primary" />}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={3} lg={2} style={{ textAlign: 'center' }}>
-                        <Button variant="contained" color="primary" endIcon={<Search />}>
+                    <Grid item xs={12} sm={6} md={3} style={{ textAlign: 'center' }}>
+                        <Button onClick={onSearchClick} variant="contained" color="primary" endIcon={<Search />}>
                             Procurar
                         </Button>
                     </Grid>

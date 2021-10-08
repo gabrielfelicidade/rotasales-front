@@ -10,12 +10,23 @@ export const SaleStatus = {
 };
 
 const Sales = () => {
-    const buyer = useState('');
-    const event = useState('');
+    const customer = useState('');
+    const event = useState(' ');
     const donation = useState(false);
+    const filterModel = useState({
+        customer: customer[0],
+        donation: donation[0],
+        event: event[0],
+        page: 0
+    });
 
     const onSearchClick = () => {
-        console.log('search');
+        filterModel[1]({
+            customer: customer[0],
+            donation: donation[0],
+            event: event[0],
+            page: 0
+        });
     };
 
     return (
@@ -24,13 +35,15 @@ const Sales = () => {
                 Minhas Vendas
             </Typography>
             <SalesFilter
-                buyer={buyer}
+                customer={customer}
                 event={event}
                 donation={donation}
                 onSearchClick={onSearchClick}
             />
             <SalesActions />
-            <SalesGrid />
+            <SalesGrid
+                filterModel={filterModel}
+            />
         </>
     );
 };

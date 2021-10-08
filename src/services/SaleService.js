@@ -2,8 +2,8 @@ import Api from "./Api";
 
 const RESOURCE_URL = `/sales`
 
-export const getSalesBySellerId = async () => {
-    const response = await Api.get(RESOURCE_URL);
+export const getSalesBySellerId = async (filterModel) => {
+    const response = await Api.get(`${RESOURCE_URL}?customer=${filterModel.customer}&donation=${filterModel.donation}&event=${filterModel.event}&page=${filterModel.page}&limit=10`);
     return response.data;
 }
 
@@ -31,6 +31,6 @@ export const changeSaleStatus = async (saleId, status) => {
 }
 
 export const downloadReceipt = async (saleId) => {
-    const response = await Api.get(`/exports/receipt/${saleId}`, { responseType: 'blob' });
+    const response = await Api.get(`/sales/${saleId}/receipt`, { responseType: 'blob' });
     return response;
 }

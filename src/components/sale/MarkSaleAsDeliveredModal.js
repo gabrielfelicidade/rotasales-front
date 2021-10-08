@@ -1,34 +1,34 @@
-import { Box, Modal, Typography } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, List, ListItem, ListItemText } from "@mui/material";
 
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
+const listStyle = {
+    color: 'rgba(0, 0, 0, 0.6)'
 };
 
-const MarkSaleAsDeliveredModal = ({ open, saleId, handleClose }) => {
+const MarkSaleAsDeliveredModal = ({ open, sale, handleClose }) => {
     return (
-        <Modal
+        <Dialog
+            fullWidth={true}
+            maxWidth={'sm'}
             open={open}
             onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
         >
-            <Box sx={style}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Text in a modal
-                </Typography>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                </Typography>
-            </Box>
-        </Modal>
+            <DialogTitle>Entrega de Venda</DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    Deseja realmente sinalizar a venda para o cliente {sale.customer} que contém os itens abaixo como entregue?
+                </DialogContentText>
+                <List sx={listStyle}>
+                    {sale.items.map(item =>
+                        <ListItem key={item.description}>
+                            <ListItemText primary={`${item.amount} - ${item.description}`} />
+                        </ListItem>)}
+                </List>
+            </DialogContent>
+            <DialogActions>
+                <Button variant="contained" color="primary" onClick={handleClose}>Cancelar</Button>
+                <Button variant="contained" color="primary">Confirmar</Button>
+            </DialogActions>
+        </Dialog>
     );
 };
 

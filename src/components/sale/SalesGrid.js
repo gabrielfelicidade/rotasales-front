@@ -1,9 +1,9 @@
-import { Delete, Edit, LocalShipping } from "@mui/icons-material";
+import { Delete, Edit, LocalShipping, Receipt } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 import { styled } from "@mui/system";
 import { DataGrid, ptBR } from "@mui/x-data-grid";
-import { useState } from "react";
-import NumberFormat from "react-number-format";
+import { useEffect, useState } from "react";
+import { downloadReceipt, getSalesBySellerId } from "../../services/SaleService";
 import DeleteSaleModal from "./DeleteSaleModal";
 import MarkSaleAsDeliveredModal from "./MarkSaleAsDeliveredModal";
 import { SaleStatus } from "./Sales";
@@ -15,7 +15,7 @@ const StyledDataGrid = styled(DataGrid)`
   }
 `;
 
-const SalesGrid = () => {
+const SalesGrid = ({ filterModel }) => {
     const [selectedSale, setSelectedSale] = useState(null);
     const [markSaleAsDeliveredModalOpen, setMarkSaleAsDeliveredModalOpen] = useState(false);
     const handleOpenMarkSaleAsDeliveredModal = () => setMarkSaleAsDeliveredModalOpen(true);
@@ -23,20 +23,27 @@ const SalesGrid = () => {
     const [deleteSaleModalOpen, setDeleteSaleModalOpen] = useState(false);
     const handleOpenDeleteSaleModal = () => setDeleteSaleModalOpen(true);
     const handleCloseDeleteSaleModal = () => setDeleteSaleModalOpen(false);
+    const [rows, setRows] = useState([]);
+    const [rowCount, setRowCount] = useState(0);
 
-    const rows = [
-        { id: 1, event: 'Hello', buyer: 'World', totalValue: 23.50, donation: false, status: 'WITHDRAWN' },
-        { id: 2, event: 'Hello', buyer: 'World', totalValue: 12.50, donation: false, status: 'WITHDRAWN' },
-        { id: 3, event: 'Hello', buyer: 'World', totalValue: 1.10, donation: false, status: 'WITHDRAWN' },
-        { id: 4, event: 'Hello', buyer: 'World', totalValue: 1, donation: true, status: 'WITHDRAWN' },
-        { id: 5, event: 'Hello', buyer: 'World', totalValue: 23.50, donation: false, status: 'WITHDRAWN' },
-        { id: 6, event: 'Hello', buyer: 'World', totalValue: 12.50, donation: false, status: 'AWAITING_WITHDRAWAL' },
-        { id: 7, event: 'Hello', buyer: 'World', totalValue: 1.10, donation: false, status: 'WITHDRAWN' },
-        { id: 8, event: 'Hello', buyer: 'World', totalValue: 1, donation: false, status: 'WITHDRAWN' },
-        { id: 9, event: 'Hello', buyer: 'World', totalValue: 23.50, donation: false, status: 'WITHDRAWN' },
-        { id: 10, event: 'Hello', buyer: 'World', totalValue: 12.50, donation: false, status: 'WITHDRAWN' },
-        { id: 11, event: 'Hello', buyer: 'World', totalValue: 12.50, donation: false, status: 'WITHDRAWN' },
-    ];
+    useEffect(() => {
+        let active = true;
+
+        (async () => {
+            const sales = await getSalesBySellerId(filterModel[0]);
+
+            if (!active) {
+                return;
+            }
+
+            setRows(sales.content);
+            setRowCount(sales.total_elements);
+        })();
+
+        return () => {
+            active = false;
+        };
+    }, [filterModel]);
 
     const columns = [
         {
@@ -44,22 +51,29 @@ const SalesGrid = () => {
             flex: 1,
             headerName: 'Evento',
             minWidth: 150,
+            disableColumnMenu: true,
+            sortable: false,
         },
         {
-            field: 'buyer',
+            field: 'customer',
             flex: 1,
             headerName: 'Comprador',
             minWidth: 150,
+            disableColumnMenu: true,
+            sortable: false,
         },
         {
-            field: 'totalValue',
+            field: 'total_value',
             flex: 1,
             headerName: 'Valor Total',
             minWidth: 145,
-            renderCell: (params) => {
-                return (
-                    <NumberFormat value={params.value} decimalSeparator="," thousandSeparator="." displayType={'text'} prefix={'R$ '} decimalScale={2} fixedDecimalScale={true} />
-                );
+            disableColumnMenu: true,
+            sortable: false,
+            valueFormatter: ({ value }) => {
+                return new Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                }).format(value);
             }
         },
         {
@@ -67,6 +81,8 @@ const SalesGrid = () => {
             flex: 1,
             headerName: 'Doação',
             minWidth: 125,
+            disableColumnMenu: true,
+            sortable: false,
             renderCell: (params) => {
                 return params.value ? "Sim" : "Não";
             }
@@ -76,35 +92,61 @@ const SalesGrid = () => {
             flex: 1,
             headerName: 'Status',
             minWidth: 150,
+            disableColumnMenu: true,
+            sortable: false,
             renderCell: (params) => {
                 return SaleStatus[params.value];
             }
         },
         {
+            align: 'center',
             field: '',
             headerName: '',
-            flex: 0.6,
-            minWidth: 135,
+            flex: 0.4,
+            minWidth: 175,
             disableClickEventBubbling: true,
             disableColumnMenu: true,
             disableReorder: true,
             sortable: false,
             renderCell: (params) => {
+                const row = params.row;
+
                 return (
                     <>
-                        <EditButton saleId={params.row.id} />
-                        <DeleteButton saleId={params.row.id} />
-                        <DeliveryButton saleId={params.row.id} />
+                        <ReceiptButton sale={row} />
+                        <EditButton sale={row} />
+                        <DeleteButton sale={row} />
+                        <DeliveryButton sale={row} />
                     </>
                 )
             }
         },
     ];
 
-    const EditButton = ({ saleId }) => {
+    const ReceiptButton = ({ sale }) => {
         const onClick = () => {
-            alert('Editing ' + saleId);
-            setSelectedSale(saleId);
+            downloadReceipt(sale.id)
+                .then(res => {
+                    const file = new Blob(
+                        [res.data],
+                        { type: 'application/pdf' });
+                    const fileURL = URL.createObjectURL(file);
+                    window.open(fileURL);
+                })
+        };
+
+        return (
+            <Tooltip title="Visualizar Recibo">
+                <IconButton onClick={onClick}>
+                    <Receipt />
+                </IconButton>
+            </Tooltip>
+        )
+    };
+
+    const EditButton = ({ sale }) => {
+        const onClick = () => {
+            setSelectedSale(sale);
         };
 
         return (
@@ -116,9 +158,9 @@ const SalesGrid = () => {
         )
     };
 
-    const DeleteButton = ({ saleId }) => {
+    const DeleteButton = ({ sale }) => {
         const onClick = () => {
-            setSelectedSale(saleId);
+            setSelectedSale(sale);
             handleOpenDeleteSaleModal();
         };
 
@@ -131,18 +173,22 @@ const SalesGrid = () => {
         )
     };
 
-    const DeliveryButton = ({ saleId }) => {
+    const DeliveryButton = ({ sale }) => {
         const onClick = () => {
-            setSelectedSale(saleId);
+            setSelectedSale(sale);
             handleOpenMarkSaleAsDeliveredModal();
         };
 
         return (
-            <Tooltip title="Marcar como entregue">
-                <IconButton onClick={onClick}>
-                    <LocalShipping />
-                </IconButton>
-            </Tooltip>
+            <>
+                {sale.status !== 'WITHDRAWN'
+                    ? <Tooltip title="Marcar como entregue">
+                        <IconButton onClick={onClick}>
+                            <LocalShipping />
+                        </IconButton>
+                    </Tooltip>
+                    : null}
+            </>
         )
     };
 
@@ -155,20 +201,25 @@ const SalesGrid = () => {
                     disableColumnSelector={true}
                     rows={rows}
                     columns={columns}
+                    pagination
+                    page={filterModel[0].page}
                     pageSize={10}
+                    rowCount={rowCount}
+                    paginationMode="server"
+                    onPageChange={(newPage) => filterModel[1]({ ...filterModel[0], page: newPage })}
                     localeText={ptBR.props.MuiDataGrid.localeText} />
             </div>
             {markSaleAsDeliveredModalOpen === true
                 ? <MarkSaleAsDeliveredModal
                     open={markSaleAsDeliveredModalOpen}
                     handleClose={handleCloseMarkSaleAsDeliveredModal}
-                    saleId={selectedSale} />
+                    sale={selectedSale} />
                 : null}
             {deleteSaleModalOpen === true
                 ? <DeleteSaleModal
                     open={deleteSaleModalOpen}
                     handleClose={handleCloseDeleteSaleModal}
-                    saleId={selectedSale} />
+                    sale={selectedSale} />
                 : null}
         </>
     );

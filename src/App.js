@@ -11,6 +11,7 @@ import Sales from './components/sale/Sales';
 import Home from './components/home/Home';
 import { ThemeProvider } from '@mui/private-theming';
 import { createTheme } from '@mui/material';
+import CreateSale from './components/sale/CreateSale';
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="/login" component={Login} />
           <WithNavLayoutRoute exact path="/home" component={Home} />
           <WithNavLayoutRoute exact path="/sales" component={Sales} />
+          <WithNavLayoutRoute exact path="/sales/new" component={CreateSale} />
           <Redirect to="/home" />
         </Switch>
       </BrowserRouter>

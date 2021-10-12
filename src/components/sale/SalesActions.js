@@ -1,6 +1,8 @@
 import { AddBusiness, QrCode } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { styled } from "@mui/system";
+import { useState } from "react";
+import QRCodeModal from "./QRCodeModal";
 
 const SalesActionsContainer = styled('div')({
     marginTop: '2rem',
@@ -14,14 +16,24 @@ const SalesActionsContainer = styled('div')({
 });
 
 const SalesActions = () => {
-    return <SalesActionsContainer>
-        <Button variant="contained" color="primary" endIcon={<QrCode />}>
-            Ler QRCode
-        </Button>
-        <Button variant="contained" color="success" endIcon={<AddBusiness />}>
-            Cadastrar Venda
-        </Button>
-    </SalesActionsContainer>
+
+    const [openQRCodeModal, setOpenQRCodeModal] = useState(false);
+    const handleCloseQRCodeModal = () => setOpenQRCodeModal(false);
+    const handleOpenQRCodeModal = () => setOpenQRCodeModal(true);
+
+    return (
+        <>
+        <QRCodeModal open={openQRCodeModal} handleClose={handleCloseQRCodeModal} />
+        <SalesActionsContainer>
+            <Button variant="contained" color="primary" endIcon={<QrCode />} onClick={handleOpenQRCodeModal}>
+                Ler QRCode
+            </Button>
+            <Button variant="contained" color="success" endIcon={<AddBusiness />}>
+                Cadastrar Venda
+            </Button>
+        </SalesActionsContainer>
+        </>
+    )
 };
 
 export default SalesActions;

@@ -7,7 +7,7 @@ export const AuthContext = createContext({})
 export const useAuth = () => {
 
     const isTokenExpired = (token) => {
-        const decodedToken = token ? JSON.parse(atob(token.split('.')[1])) : null;
+        const decodedToken = token ? JSON.parse(Buffer.from(token.split('.')[1], 'base64')) : null;
 
         if(token && decodedToken.exp * 1000 > Date.now() + 5 * 60 * 1000) {
             return false;
@@ -17,7 +17,7 @@ export const useAuth = () => {
     }
 
     const loadToken = () => {
-        const token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2lwZWNhIiwiZXhwIjoxNjMzNzMzMTgyfQ.SFDRvb3IGp1ZUKDPZ9Yr_erTjJ3-OP5Sv-EmSnjRGNblk6IvJXnKBZ66O11ll7OA8_R0iL7hdblNoPD7ORBZJg';
+        const token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2lwZWNhIiwiZXhwIjoxNjM0MDQzMjc5fQ.KQekaw5TCGBMlkIq8hCCTteGi_mwLQcQHnKbiwbeJyUZQY0g_ugaMU_aJSJkw0F5bx6hPrUOrNJcatIHf3e8kg';
         
         if(isTokenExpired(token)) {
             return null;

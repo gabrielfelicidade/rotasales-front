@@ -1,10 +1,28 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, List, ListItem, ListItemText } from "@mui/material";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { changeSaleStatus } from "../../services/SaleService";
 
 const listStyle = {
     color: 'rgba(0, 0, 0, 0.6)'
 };
 
-const MarkSaleAsDeliveredModal = ({ open, sale, handleClose }) => {
+const MarkSaleAsDeliveredModal = ({ open, sale, handleClose, handleUpdateRows }) => {
+    const [updating, setUpdating] = useState(false);
+
+    const handleUpdate = async () => {
+        if (updating === false) {
+            changeSaleStatus(sale.id, 'WITHDRAWN')
+                .then(_ => toast.success('Venda atualizada com sucesso!'))
+                .then(_ => { if(handleUpdateRows) handleUpdateRows() })
+                .catch(err => toast.error(`Erro ao atualizar a venda, mensagem: ${err.response.data.reason}`))
+                .finally(_ => {
+                    setUpdating(false);
+                    handleClose();
+                });
+        }
+    };
+
     return (
         <Dialog
             fullWidth={true}
@@ -26,7 +44,7 @@ const MarkSaleAsDeliveredModal = ({ open, sale, handleClose }) => {
             </DialogContent>
             <DialogActions>
                 <Button variant="contained" color="primary" onClick={handleClose}>Cancelar</Button>
-                <Button variant="contained" color="primary">Confirmar</Button>
+                <Button variant="contained" color="primary" onClick={handleUpdate}>Confirmar</Button>
             </DialogActions>
         </Dialog>
     );

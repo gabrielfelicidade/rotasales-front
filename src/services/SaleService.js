@@ -7,6 +7,11 @@ export const getSalesBySellerId = async (filterModel) => {
     return response.data;
 }
 
+export const getSaleById = async (saleId) => {
+    const response = await Api.get(`${RESOURCE_URL}/${saleId}`);
+    return response.data;
+}
+
 export const createSale = async (sale) => {
     const object = { ...sale };
     const response = await Api.post(RESOURCE_URL, object);
@@ -25,7 +30,7 @@ export const deleteSale = async (saleId) => {
 }
 
 export const changeSaleStatus = async (saleId, status) => {
-    const object = { saleId, status };
+    const object = { sale_id: saleId, status };
     const response = await Api.patch(RESOURCE_URL, object)
     return response;
 }

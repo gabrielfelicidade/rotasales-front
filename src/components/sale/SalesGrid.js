@@ -192,6 +192,10 @@ const SalesGrid = ({ filterModel }) => {
         )
     };
 
+    const handleUpdateRows = () => {
+        filterModel[1]({ ...filterModel[0] });
+    }
+
     return (
         <>
             <div style={{ height: 650, width: '100%', marginTop: '2rem' }}>
@@ -213,13 +217,15 @@ const SalesGrid = ({ filterModel }) => {
                 ? <MarkSaleAsDeliveredModal
                     open={markSaleAsDeliveredModalOpen}
                     handleClose={handleCloseMarkSaleAsDeliveredModal}
-                    sale={selectedSale} />
+                    sale={selectedSale}
+                    handleUpdateRows={handleUpdateRows} />
                 : null}
             {deleteSaleModalOpen === true
                 ? <DeleteSaleModal
                     open={deleteSaleModalOpen}
                     handleClose={handleCloseDeleteSaleModal}
-                    sale={selectedSale} />
+                    sale={selectedSale}
+                    handleUpdateRows={handleUpdateRows} />
                 : null}
         </>
     );

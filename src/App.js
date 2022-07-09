@@ -8,7 +8,6 @@ import WithNavLayoutRoute from './components/route/WithNavLayoutRoute';
 import { useContext } from 'react';
 import { setupInterceptors } from './services/Api';
 import Sales from './components/sale/Sales';
-import Home from './components/home/Home';
 import { ThemeProvider } from '@mui/private-theming';
 import { createTheme } from '@mui/material';
 import CreateSale from './components/sale/CreateSale';
@@ -26,11 +25,10 @@ function App() {
       <BrowserRouter>
         <Switch>
           <Route path="/login" component={Login} />
-          <WithNavLayoutRoute exact path="/home" component={Home} />
           <WithNavLayoutRoute exact path="/sales" component={Sales} />
           <WithNavLayoutRoute exact path="/sales/new" component={CreateSale} />
           <WithNavLayoutRoute exact path="/sales/edit" component={UpdateSale} />
-          <Redirect to="/home" />
+          <Redirect to="/sales" />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>

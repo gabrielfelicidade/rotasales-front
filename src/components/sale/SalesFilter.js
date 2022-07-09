@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { getActiveEvents } from '../../services/EventService';
 
-const SalesFilter = ({ customer, event, donation, onSearchClick }) => {
+const SalesFilter = ({ buyer, event, donation, onSearchClick }) => {
 
     const [events, setEvents] = useState([]);
 
@@ -38,7 +38,7 @@ const SalesFilter = ({ customer, event, donation, onSearchClick }) => {
             <AccordionDetails>
                 <Grid container spacing={6}>
                     <Grid item xs={12} sm={6} md={3}>
-                        <TextField value={customer[0]} onChange={e => customer[1](e.target.value)} id="outlined-basic" label="Comprador" variant="outlined" style={{ width: '100%' }} />
+                        <TextField value={buyer[0]} onChange={e => buyer[1](e.target.value)} id="outlined-basic" label="Comprador" variant="outlined" style={{ width: '100%' }} />
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                         <FormControl sx={{ minWidth: 80 }}
@@ -53,7 +53,7 @@ const SalesFilter = ({ customer, event, donation, onSearchClick }) => {
                                 onChange={e => event[1](e.target.value)}
                             >
                                 <MenuItem value={' '}>Todos os eventos</MenuItem>
-                                {events.map(event => <MenuItem value={event.id} key={event.id}>{event.description}</MenuItem>)}
+                                {events.map(event => <MenuItem value={event.id} key={event.id}>{event.title}</MenuItem>)}
                             </Select>
                         </FormControl>
                     </Grid>
@@ -77,7 +77,7 @@ const SalesFilter = ({ customer, event, donation, onSearchClick }) => {
 export default SalesFilter;
 
 SalesFilter.propTypes = {
-    customer: PropTypes.array.isRequired,
+    buyer: PropTypes.array.isRequired,
     event: PropTypes.array.isRequired,
     donation: PropTypes.array.isRequired,
     onSearchClick: PropTypes.func.isRequired

@@ -3,6 +3,7 @@ import { IconButton, Tooltip } from "@mui/material";
 import { styled } from "@mui/system";
 import { DataGrid, ptBR } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { downloadReceipt, getSalesBySellerId } from "../../services/SaleService";
 import DeleteSaleModal from "./DeleteSaleModal";
 import MarkSaleAsDeliveredModal from "./MarkSaleAsDeliveredModal";
@@ -16,6 +17,7 @@ const StyledDataGrid = styled(DataGrid)`
 `;
 
 const SalesGrid = ({ filterModel }) => {
+    const history = useHistory();
     const [selectedSale, setSelectedSale] = useState(null);
     const [markSaleAsDeliveredModalOpen, setMarkSaleAsDeliveredModalOpen] = useState(false);
     const handleOpenMarkSaleAsDeliveredModal = () => setMarkSaleAsDeliveredModalOpen(true);
@@ -47,17 +49,17 @@ const SalesGrid = ({ filterModel }) => {
 
     const columns = [
         {
-            field: 'event',
+            field: 'buyer',
             flex: 1,
-            headerName: 'Evento',
+            headerName: 'Comprador',
             minWidth: 150,
             disableColumnMenu: true,
             sortable: false,
         },
         {
-            field: 'customer',
+            field: 'event',
             flex: 1,
-            headerName: 'Comprador',
+            headerName: 'Evento',
             minWidth: 150,
             disableColumnMenu: true,
             sortable: false,
@@ -146,7 +148,7 @@ const SalesGrid = ({ filterModel }) => {
 
     const EditButton = ({ sale }) => {
         const onClick = () => {
-            setSelectedSale(sale);
+            history.push('/sales/edit', { id: sale.id });
         };
 
         return (
@@ -181,7 +183,7 @@ const SalesGrid = ({ filterModel }) => {
 
         return (
             <>
-                {sale.status !== 'WITHDRAWN'
+                {sale.status !== 'DELIVERED'
                     ? <Tooltip title="Marcar como entregue">
                         <IconButton onClick={onClick}>
                             <LocalShipping />

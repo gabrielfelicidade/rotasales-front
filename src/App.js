@@ -12,6 +12,7 @@ import Home from './components/home/Home';
 import { ThemeProvider } from '@mui/private-theming';
 import { createTheme } from '@mui/material';
 import CreateSale from './components/sale/CreateSale';
+import UpdateSale from './components/sale/UpdateSale';
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
           <WithNavLayoutRoute exact path="/home" component={Home} />
           <WithNavLayoutRoute exact path="/sales" component={Sales} />
           <WithNavLayoutRoute exact path="/sales/new" component={CreateSale} />
+          <WithNavLayoutRoute exact path="/sales/edit" component={UpdateSale} />
           <Redirect to="/home" />
         </Switch>
       </BrowserRouter>

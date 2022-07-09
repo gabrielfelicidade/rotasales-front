@@ -5,23 +5,15 @@ import logo from '../../assets/logo.png';
 import { AuthContext } from "../../hooks/Authentication";
 import { toast } from 'react-toastify';
 import { Button, Card, CardActions, CardContent, CardMedia, TextField } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import { withStyles } from "@mui/styles";
+import { styled } from "@mui/system";
 
-const useStyles = makeStyles({
+const styles = {
     root: {
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
-    },
-    card: {
-        minWidth: 350,
-        width: "15%",
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        backgroundColor: 'pink',
-        padding: '15px 0'
+        justifyContent: 'center',
     },
     bullet: {
         display: 'inline-block',
@@ -43,16 +35,37 @@ const useStyles = makeStyles({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        gap: '25px',
         width: '100%'
     },
     inputs: {
-        margin: '12px auto',
         width: '70%'
+    }
+};
+
+const StyledCard = styled(Card)({
+    minWidth: 350,
+    width: "15%",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    backgroundColor: 'pink',
+    padding: '25px 0'
+});
+
+const StyledButton = styled(Button)({
+    backgroundColor: '#d6004c',
+    '&:hover': {
+        backgroundColor: '#c51162'
     }
 });
 
-const Login = () => {
-    const classes = useStyles();
+const StyledActions = styled(CardActions)({
+    margin: '1.5rem 0'
+});
+
+const Login = (props) => {
+    const { classes } = props;
     const auth = useContext(AuthContext);
     const [formInputs, setFormInputs] = useState({
         username: {
@@ -86,23 +99,29 @@ const Login = () => {
         }
     }
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            authenticate();
+        }
+    }
+
     return (
         <div className={classes.root}>
-            <Card className={classes.card}>
+            <StyledCard>
                 <CardMedia
                     className={classes.media}
                     image={logo}
                 />
                 <CardContent className={classes.content}>
-                    <TextField required name="username" label="Usuário" variant="outlined" className={classes.inputs} value={formInputs.username.value} onChange={inputChangeHandler} />
-                    <TextField required name="password" label="Senha" variant="outlined" type="password" className={classes.inputs} value={formInputs.password.value} onChange={inputChangeHandler} />
+                    <TextField required name="username" label="Usuário" variant="outlined" className={classes.inputs} value={formInputs.username.value} onChange={inputChangeHandler} onKeyDown={handleKeyDown} />
+                    <TextField required name="password" label="Senha" variant="outlined" type="password" className={classes.inputs} value={formInputs.password.value} onChange={inputChangeHandler} onKeyDown={handleKeyDown} />
                 </CardContent>
-                <CardActions className="justify-content-center my-4">
-                    <Button variant="contained" color="secondary" onClick={authenticate}>Entrar</Button>
-                </CardActions>
-            </Card>
+                <StyledActions>
+                    <StyledButton variant="contained" color="primary" onClick={authenticate}>Entrar</StyledButton>
+                </StyledActions>
+            </StyledCard>
         </div>
     )
 }
 
-export default Login;
+export default withStyles(styles)(Login);

@@ -5,16 +5,17 @@ import SalesFilter from "./SalesFilter";
 import SalesGrid from "./SalesGrid";
 
 export const SaleStatus = {
-    'AWAITING_WITHDRAWAL': 'Aguardando Retirada',
-    'WITHDRAWN': 'Retirado'
+    'AWAITING_SEPARATION': 'Aguardando separação',
+    'SEPARATION_COMPLETED': 'Separação completa',
+    'DELIVERED': 'Entregue'
 };
 
 const Sales = () => {
-    const customer = useState('');
+    const buyer = useState('');
     const event = useState(' ');
     const donation = useState(false);
     const filterModel = useState({
-        customer: customer[0],
+        buyer: buyer[0],
         donation: donation[0],
         event: event[0],
         page: 0
@@ -22,7 +23,7 @@ const Sales = () => {
 
     const onSearchClick = () => {
         filterModel[1]({
-            customer: customer[0],
+            buyer: buyer[0],
             donation: donation[0],
             event: event[0],
             page: 0
@@ -35,7 +36,7 @@ const Sales = () => {
                 Minhas Vendas
             </Typography>
             <SalesFilter
-                customer={customer}
+                buyer={buyer}
                 event={event}
                 donation={donation}
                 onSearchClick={onSearchClick}

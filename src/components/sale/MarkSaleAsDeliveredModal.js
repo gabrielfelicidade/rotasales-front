@@ -12,7 +12,7 @@ const MarkSaleAsDeliveredModal = ({ open, sale, handleClose, handleUpdateRows })
 
     const handleUpdate = async () => {
         if (updating === false) {
-            changeSaleStatus(sale.id, 'WITHDRAWN')
+            changeSaleStatus(sale.id, 'DELIVERED')
                 .then(_ => toast.success('Venda atualizada com sucesso!'))
                 .then(_ => { if(handleUpdateRows) handleUpdateRows() })
                 .catch(err => toast.error(`Erro ao atualizar a venda, mensagem: ${err.response.data.reason}`))
@@ -33,12 +33,12 @@ const MarkSaleAsDeliveredModal = ({ open, sale, handleClose, handleUpdateRows })
             <DialogTitle>Entrega de Venda</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Deseja realmente sinalizar a venda para o cliente {sale.customer} que contém os itens abaixo como entregue?
+                    Deseja realmente sinalizar a venda para o cliente {sale.buyer} que contém os itens abaixo como entregue?
                 </DialogContentText>
                 <List sx={listStyle}>
                     {sale.items.map(item =>
-                        <ListItem key={item.description}>
-                            <ListItemText primary={`${item.amount} - ${item.description}`} />
+                        <ListItem key={item.name}>
+                            <ListItemText primary={`${item.amount} - ${item.name}`} />
                         </ListItem>)}
                 </List>
             </DialogContent>

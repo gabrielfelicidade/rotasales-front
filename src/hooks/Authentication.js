@@ -17,7 +17,7 @@ export const useAuth = () => {
     }
 
     const loadToken = () => {
-        const token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2lwZWNhIiwiZXhwIjoxNjM0MDQzMjc5fQ.KQekaw5TCGBMlkIq8hCCTteGi_mwLQcQHnKbiwbeJyUZQY0g_ugaMU_aJSJkw0F5bx6hPrUOrNJcatIHf3e8kg';
+        const token = localStorage.getItem('token');
         
         if(isTokenExpired(token)) {
             return null;
@@ -31,15 +31,15 @@ export const useAuth = () => {
     const [token, setToken] = useState(loadToken());
     
     const login = async (username, password) => {
-        const res = await Api.post('/users/login', {
+        const res = await Api.post('/auth', {
             username: username,
             password: password
         })
         .then(res => res.data)
         .then(res => {
-            localStorage.setItem('token', res.token);
-            Api.defaults.headers.Authorization = `Bearer ${res.token}`;
-            setToken(res.token);
+            localStorage.setItem('token', res.access_token);
+            Api.defaults.headers.Authorization = `Bearer ${res.access_token}`;
+            setToken(res.access_token);
             toast.success('Sucesso ao realizar login!')
             return res;
         })
@@ -48,7 +48,7 @@ export const useAuth = () => {
         return res;
     }
 
-    const isAuthenticated = () => true;
+    const isAuthenticated = () => !isTokenExpired(token);
 
     const logoff = () => {
         localStorage.removeItem('token');

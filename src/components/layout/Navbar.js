@@ -26,10 +26,10 @@ const Navbar = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const routes = [
-    {
-      route: "/home",
-      text: "Página Inicial"
-    },
+    // {
+    //   route: "/home",
+    //   text: "Página Inicial"
+    // },
     {
       route: "/sales",
       text: "Minhas Vendas"

@@ -1,3 +1,3 @@
 export const environment = {
-    API_URL: 'https://rotasales.herokuapp.com/'
+    API_URL: process.env.REACT_APP_API_URL
 }

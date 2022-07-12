@@ -34,6 +34,7 @@ const SaleForm = (props) => {
         return () => {
             active = false;
         };
+        // eslint-disable-next-line
     }, []);
 
     const handleChangeSale = (field, value) => {

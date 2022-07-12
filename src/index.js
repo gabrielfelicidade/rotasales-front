@@ -4,21 +4,26 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import 'fontsource-roboto';
 import App from './App';
+import Loader from './components/layout/Loader';
 import { AuthProvider } from './hooks/Authentication';
 import { ToastContainer } from 'react-toastify';
+import { RequestsProvider } from './hooks/RequestsContext';
 
 ReactDOM.render(
   <AuthProvider>
-    <App />
-    <ToastContainer
-      position="top-right"
-      autoClose={2000}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss={false}
-      draggable={false}
-      pauseOnHover={false}
-    />
+    <RequestsProvider>
+      <App />
+      <Loader></Loader>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable={false}
+        pauseOnHover={false}
+      />
+    </RequestsProvider>
   </AuthProvider>,
   document.getElementById('root')
 );

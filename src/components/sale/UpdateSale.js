@@ -53,6 +53,7 @@ const UpdateSale = (props) => {
         return () => {
             active = false;
         };
+        // eslint-disable-next-line
     }, []);
 
     const handleSaveButton = () => {

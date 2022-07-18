@@ -134,12 +134,7 @@ const SalesGrid = ({ filterModel }) => {
                         { type: 'application/pdf' });
                     const fileURL = URL.createObjectURL(file);
                     if (!window.open(fileURL)) {
-                        let a = document.createElement("a");
-                        a.style = "display:none";
-                        a.href = fileURL;
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
+                        window.location = fileURL;
                     }
                 })
         };
